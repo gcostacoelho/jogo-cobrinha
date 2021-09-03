@@ -41,10 +41,19 @@ function update(event){
 }
 
 function startGame(){
+    /*Coordena os movimentos da cobra*/
     if(snake[0].x > 15 * box && direction =='right') snake[0].x=0;
     if(snake[0].x < 0 * box && direction =='left') snake[0].x=16*box;
     if(snake[0].y > 15 * box && direction =='down') snake[0].y=0;
     if(snake[0].y < 0 * box && direction =='up') snake[0].y=16*box;
+    
+    /*Verifica se a cobra se chocou com ela mesma e encerra o jogo*/
+    for(i=1;i<snake.length;i++){
+        if(snake[0].x == snake[i].x && snake[0].y == snake[i].y ){
+            clearInterval(game);
+            alert("GAME OVER :(");
+        }
+    }
 
     createBG();
     createFruit()
@@ -58,7 +67,13 @@ function startGame(){
     if(direction == "up") snakeY -= box;
     if(direction == "down") snakeY += box;
 
-    snake.pop();
+    /*Aumenta a cobra e realoca a fruta em um campo aleatório*/
+    if(snakeX != fruit.x || snakeY != fruit.y){
+       snake.pop();
+    }else{
+        fruit.x = Math.floor(Math.random() * 15 + 1) * box;
+        fruit.y = Math.floor(Math.random() * 15 + 1) * box;
+    }
 
     let newHead = {
         x:snakeX,
